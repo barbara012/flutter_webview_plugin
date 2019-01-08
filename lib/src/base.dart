@@ -28,6 +28,7 @@ class FlutterWebviewPlugin {
   final _onStateChanged = StreamController<WebViewStateChanged>.broadcast();
   final _onScrollXChanged = StreamController<double>.broadcast();
   final _onScrollYChanged = StreamController<double>.broadcast();
+  final _orderChanged = StreamController<Map>.broadcast();
   final _onHttpError = StreamController<WebViewHttpError>.broadcast();
 
   Future<Null> _handleMessages(MethodCall call) async {
@@ -43,6 +44,9 @@ class FlutterWebviewPlugin {
         break;
       case 'onScrollYChanged':
         _onScrollYChanged.add(call.arguments['yDirection']);
+        break;
+      case 'orderChanged':
+        _orderChanged.add(call.arguments['data']);
         break;
       case 'onState':
         _onStateChanged.add(
@@ -70,6 +74,8 @@ class FlutterWebviewPlugin {
 
   /// Listening web view y position scroll change
   Stream<double> get onScrollYChanged => _onScrollYChanged.stream;
+
+  Stream<Map> get orderChanged => _orderChanged.stream;
 
   /// Listening web view x position scroll change
   Stream<double> get onScrollXChanged => _onScrollXChanged.stream;
