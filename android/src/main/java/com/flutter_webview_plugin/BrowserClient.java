@@ -5,6 +5,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.SslErrorHandler;
+import android.net.http.SslError;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,5 +49,10 @@ public class BrowserClient extends WebViewClient {
         data.put("url", request.getUrl().toString());
         data.put("code", Integer.toString(errorResponse.getStatusCode()));
         FlutterWebviewPlugin.channel.invokeMethod("onHttpError", data);
+    }
+
+    @Override
+    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error){
+        handler.proceed(); //解决方案在此，不要调用super.xxxx
     }
 }
